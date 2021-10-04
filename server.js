@@ -22,7 +22,7 @@ app.post("/publish/resources/upload", async (request, response) => {
   // Respond with the URL of the published design
   response.send({
     type: "SUCCESS",
-    url: `${request.protocol}://${request.get("host")}${asset.name}`,
+    url: `${request.protocol}://${request.get("host")}/${asset.name}`,
   });
 });
 
