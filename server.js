@@ -23,14 +23,14 @@ app.post("/publish/resources/upload", async (request, response) => {
   }
   if (asset.type === "PDF") {
     let pdf;
-    fs.readFile(asset.url, "utf8", (err, data) => {
+    fs.readFile(asset.url, (err, data) => {
       pdf = data;
     });
     fs.writeFile(filePath, pdf);
   }
   if (asset.type === "PPTX") {
     let pptx;
-    fs.readFile(asset.url, "utf8", (err, data) => {
+    fs.readFile(asset.url, (err, data) => {
       pptx = data;
     });
     fs.writeFile(filePath, pptx);
