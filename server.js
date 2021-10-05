@@ -22,18 +22,14 @@ app.post("/publish/resources/upload", async (request, response) => {
     await image.writeAsync(filePath);
   }
   if (asset.type === "PDF") {
-    let pdf;
     fs.readFile(asset.url, (err, data) => {
-      pdf = data;
+      fs.writeFile(filePath, data);
     });
-    fs.writeFile(filePath, pdf);
   }
   if (asset.type === "PPTX") {
-    let pptx;
     fs.readFile(asset.url, (err, data) => {
-      pptx = data;
+      fs.writeFile(filePath, data);
     });
-    fs.writeFile(filePath, pptx);
   }
 
   // Respond with the URL of the published design
