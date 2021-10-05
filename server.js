@@ -15,12 +15,25 @@ app.post("/publish/resources/upload", async (request, response) => {
 
   // Get the first asset from the "assets" array
   const [asset] = request.body.assets;
-
+  const filePath = path.join(__dirname, "public", asset.name);
   // Download the asset
   if (asset.type === "JPG" || asset.type === "PNG") {
     const image = await jimp.read(asset.url);
-    const filePath = path.join(__dirname, "public", asset.name);
     await image.writeAsync(filePath);
+  }
+  if (asset.type === "PDF") {
+    let pdf;
+    fs.readFile(asset.url, "utf8", (err, data) => {
+      pdf = data;
+    });
+    fs.writeFile(filePath, pdf);
+  }
+  if (asset.type === "PPTX") {
+    let pptx;
+    fs.readFile(asset.url, "utf8", (err, data) => {
+      pptx = data;
+    });
+    fs.writeFile(filePath, pptx);
   }
 
   // Respond with the URL of the published design
