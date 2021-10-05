@@ -17,9 +17,11 @@ app.post("/publish/resources/upload", async (request, response) => {
   const [asset] = request.body.assets;
 
   // Download the asset
-  const image = await jimp.read(asset.url);
-  const filePath = path.join(__dirname, "public", asset.name);
-  await image.writeAsync(filePath);
+  if (asset.type === "JPG" || asset.type === "PNG") {
+    const image = await jimp.read(asset.url);
+    const filePath = path.join(__dirname, "public", asset.name);
+    await image.writeAsync(filePath);
+  }
 
   // Respond with the URL of the published design
   response.send({
