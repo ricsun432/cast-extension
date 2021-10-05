@@ -12,7 +12,8 @@ app.get("/hello", (req, res) => {
 app.post("/publish/resources/upload", async (request, response) => {
   // Ensure the "public" directory exists
   await fs.ensureDir(path.join(__dirname, "public"));
-
+  const dummy =
+    "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
   // Get the first asset from the "assets" array
   const [asset] = request.body.assets;
   const filePath = path.join(__dirname, "public", asset.name);
@@ -22,7 +23,7 @@ app.post("/publish/resources/upload", async (request, response) => {
     await image.writeAsync(filePath);
   }
   if (asset.type === "PDF") {
-    fs.readFile(asset.url, (err, data) => {
+    fs.readFile(dummy, (err, data) => {
       fs.writeFile(filePath, data);
     });
   }
