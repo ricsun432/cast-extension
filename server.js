@@ -20,7 +20,7 @@ app.post("/publish/resources/upload", async (request, response) => {
     const image = await jimp.read(asset.url);
     await image.writeAsync(filePath);
   } else {
-    fs.readFile(asset.url, (err, data) => {
+    fs.readFile(asset.url, "base64", (err, data) => {
       fs.writeFile(filePath, data);
     });
   }
