@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.static("public"));
-app.get("/", (req, res) => {
+app.get("/hello", (req, res) => {
   res.send("Welcome to Cast Publish Extension App");
 });
 app.post("/publish/resources/upload", async (request, response) => {
