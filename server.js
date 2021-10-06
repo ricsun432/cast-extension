@@ -44,7 +44,7 @@ app.post("/publish/resources/upload", async (request, response) => {
     const image = await jimp.read(asset.url);
     await image.writeAsync(filePath);
   } else if (asset.type === "PDF" || asset.type === "PPTX") {
-    await download(asset.url, filePath);
+    download(asset.url, filePath);
   }
   // Respond with the URL of the published design
   response.send({
