@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs-extra");
 const jimp = require("jimp");
 const path = require("path");
+const axios = require("axios");
 const app = express();
 let asset_;
 app.use(express.json());
@@ -13,6 +14,24 @@ app.get("/url", (req, res) => {
     res.send("NO ASSET FOUND");
   }
 });
+async function download(url, path) {
+  const response = await axios({
+    method: "GET",
+    url: url,
+    responseType: "stream",
+  });
+
+  response.data.pipe(fs.createWriteStream(path));
+
+  return new Promise((resolve, reject) => {
+    response.data.on("end", () => {
+      resolve();
+    });
+    response.data.on("error", (err) => {
+      reject(err);
+    });
+  });
+}
 app.post("/publish/resources/upload", async (request, response) => {
   // Ensure the "public" directory exists
   await fs.ensureDir(path.join(__dirname, "public"));
@@ -25,16 +44,7 @@ app.post("/publish/resources/upload", async (request, response) => {
     const image = await jimp.read(asset.url);
     await image.writeAsync(filePath);
   } else if (asset.type === "PDF" || asset.type === "PPTX") {
-    fs.readFile(asset.url, (err, data) => {
-      if (err) {
-        console.log(err);
-      }
-      fs.writeFile(filePath, data, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    });
+    await download(asset.url, filePath);
   }
   // Respond with the URL of the published design
   response.send({
