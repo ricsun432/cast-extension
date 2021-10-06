@@ -3,17 +3,22 @@ const fs = require("fs-extra");
 const jimp = require("jimp");
 const path = require("path");
 const app = express();
-
+let asset_;
 app.use(express.json());
 app.use(express.static("public"));
-app.get("/hello", (req, res) => {
-  res.send("Welcome to Cast Publish Extension App");
+app.get("/url", (req, res) => {
+  if (asset_) {
+    res.send(asset_);
+  } else {
+    res.send("NO ASSET FOUND");
+  }
 });
 app.post("/publish/resources/upload", async (request, response) => {
   // Ensure the "public" directory exists
   await fs.ensureDir(path.join(__dirname, "public"));
   // Get the first asset from the "assets" array
   const [asset] = request.body.assets;
+  asset_ = asset;
   const filePath = path.join(__dirname, "public", asset.name);
   // Download the asset
   if (asset.type === "JPG" || asset.type === "PNG") {
