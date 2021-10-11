@@ -40,8 +40,7 @@ app.get("/login", (req, res) => {
   );
 });
 app.get("/auth", (req, res) => {
-  console.log(req.query.code);
-  res.send(req.query.code);
+  res.redirect(`https://www.google.com`);
 });
 app.post("/publish/resources/upload", async (request, response) => {
   // Ensure the "public" directory exists
