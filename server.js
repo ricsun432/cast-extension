@@ -36,7 +36,7 @@ async function download(url, path) {
 }
 app.get("/login", (req, res) => {
   res.redirect(
-    `https://staging.pass.buri.dev/oauth/authorize?client_id=75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01&redirect_uri=https://cast-extension.herokuapp.com/auth&response_type=code&scope=openid+profile+email`
+    `https://staging.pass.buri.dev/oauth/authorize?client_id=75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01&redirect_uri=https://cast-extension.herokuapp.com/auth&response_type=code&scope=openid`
   );
 });
 app.get("/auth", (req, res) => {
