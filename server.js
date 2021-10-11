@@ -5,13 +5,17 @@ const path = require("path");
 const axios = require("axios");
 const { response } = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
+
 let asset_;
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static("public"));
 app.get("/url", (req, res) => {
   if (asset_) {
     res.send(asset_);
   } else {
+    console.log(req.cookies);
     res.send("NO ASSET FOUND");
   }
 });
