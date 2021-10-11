@@ -3,6 +3,7 @@ const fs = require("fs-extra");
 const jimp = require("jimp");
 const path = require("path");
 const axios = require("axios");
+const { response } = require("express");
 const app = express();
 let asset_;
 app.use(express.json());
@@ -38,7 +39,10 @@ app.get("/login", (req, res) => {
     `https://staging.pass.buri.dev/oauth/authorize?client_id=75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01&redirect_uri=https://cast-extension.herokuapp.com/auth&response_type=code&scope=openid+profile+email`
   );
 });
-app.get("/auth", (req, res) => {});
+app.get("/auth", (req, res) => {
+  console.log(req.query.code);
+  res.send(req.query.code);
+});
 app.post("/publish/resources/upload", async (request, response) => {
   // Ensure the "public" directory exists
   await fs.ensureDir(path.join(__dirname, "public"));
