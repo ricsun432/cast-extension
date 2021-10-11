@@ -14,6 +14,7 @@ app.get("/url", (req, res) => {
     res.send("NO ASSET FOUND");
   }
 });
+
 async function download(url, path) {
   const response = await axios({
     method: "GET",
@@ -32,6 +33,12 @@ async function download(url, path) {
     });
   });
 }
+app.get("/login", (req, res) => {
+  res.redirect(
+    `https://staging.pass.buri.dev/oauth/authorize?client_id=75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01&redirect_uri=https://cast-extension.herokuapp.com/auth&response_type=code&scope=openid+profile+email`
+  );
+});
+app.get("/auth", (req, res) => {});
 app.post("/publish/resources/upload", async (request, response) => {
   // Ensure the "public" directory exists
   await fs.ensureDir(path.join(__dirname, "public"));
