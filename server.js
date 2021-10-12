@@ -78,13 +78,13 @@ app.get("/login", (req, res) => {
 
 //Goes to /auth if logged in successfully
 app.get("/auth", async (req, res) => {
-  const { query } = req;
-  code_ = query.code;
+  // const { query } = req;
+  // code_ = query.code;
 
   const { loggedInUsers } = db.data;
 
   if (!loggedInUsers.includes(user_)) {
-    loggedInUsers.push(user);
+    loggedInUsers.push(user_);
     await db.write();
   }
 
