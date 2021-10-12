@@ -76,25 +76,37 @@ app.get("/login", (req, res) => {
   );
 });
 app.post("/publish/resources/upload", async (req, res) => {
-  // Ensure the "public" directory exists
-  await fs.ensureDir(path.join(__dirname, "public"));
-  // Get the first asset from the "assets" array
-  const [asset] = req.body.assets;
-  asset_ = asset;
-  const filePath = path.join(__dirname, "public", asset.name);
-  // Download the asset
-  if (asset.type === "JPG" || asset.type === "PNG") {
-    const image = await jimp.read(asset.url);
-    await image.writeAsync(filePath);
-  } else if (asset.type === "PDF" || asset.type === "PPTX") {
-    download(asset.url, filePath);
+  const { loggedInUsers } = db.data;
+
+  //The user is logged-in
+  if (loggedInUsers.includes(user_)) {
+    // Ensure the "public" directory exists
+    await fs.ensureDir("public");
+    // Get the first asset from the "assets" array
+    const [asset] = req.body.assets;
+    asset_ = asset;
+    const filePath = path.join("public", asset.name);
+    // Download the asset
+    if (asset.type === "JPG" || asset.type === "PNG") {
+      const image = await jimp.read(asset.url);
+      await image.writeAsync(filePath);
+    } else if (asset.type === "PDF" || asset.type === "PPTX") {
+      download(asset.url, filePath);
+    }
+    // Respond with the URL of the published design
+    res.send({
+      type: "SUCCESS",
+      url: `${req.protocol}://${req.get("host")}/${asset.name}`,
+    });
+    return;
   }
-  // Respond with the URL of the published design
+  //The user is not logged-in
   res.send({
-    type: "SUCCESS",
-    url: `${req.protocol}://${req.get("host")}/${asset.name}`,
+    type: "ERROR",
+    errorCode: "CONFIGURATION_REQUIRED",
   });
 });
+
 //Goes to /auth if logged in successfully
 app.get("/auth", async (req, res) => {
   // const { query } = req;
