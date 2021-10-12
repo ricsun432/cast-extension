@@ -59,7 +59,7 @@ app.get("/login", (req, res) => {
   const { state } = query; // A token the app must return to Canva at the end of the authentication flow.
   const { time } = query; // The UNIX timestamp (in seconds) of when the user started the authentication flow.
   const { user } = query; // The ID of the user.
-  const url = `${req.protocol}://${req.get("host")}/auth`;
+  const url = `${req.protocol}s://${req.get("host")}/auth`;
   const client_id = `75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01`;
   //assign to server variable
   brand_ = brand;
