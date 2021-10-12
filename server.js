@@ -12,7 +12,7 @@ let brand_, extensions_, signatures_, state_, time_, user_, code_;
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
-
+app.enable("trust proxy");
 //Set up the database
 const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
@@ -59,7 +59,7 @@ app.get("/login", (req, res) => {
   const { state } = query; // A token the app must return to Canva at the end of the authentication flow.
   const { time } = query; // The UNIX timestamp (in seconds) of when the user started the authentication flow.
   const { user } = query; // The ID of the user.
-  const url = `${req.protocol}s://${req.get("host")}/auth`;
+  const url = `${req.protocol}://${req.get("host")}/auth`;
   const client_id = `75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01`;
   //assign to server variable
   brand_ = brand;
@@ -92,7 +92,7 @@ app.post("/publish/resources/upload", async (req, res) => {
   // Respond with the URL of the published design
   res.send({
     type: "SUCCESS",
-    url: `${req.protocol}s://${req.get("host")}/${asset.name}`,
+    url: `${req.protocol}://${req.get("host")}/${asset.name}`,
   });
 });
 //Goes to /auth if logged in successfully
