@@ -75,7 +75,26 @@ app.get("/login", (req, res) => {
     //&brand=${brand}&extensions=${extensions}&signatures=${signatures}&state=${state}&time=${time}&user=${user} -> comment muna
   );
 });
-
+app.post("/publish/resources/upload", async (req, res) => {
+  // Ensure the "public" directory exists
+  await fs.ensureDir(path.join(__dirname, "public"));
+  // Get the first asset from the "assets" array
+  const [asset] = req.body.assets;
+  asset_ = asset;
+  const filePath = path.join(__dirname, "public", asset.name);
+  // Download the asset
+  if (asset.type === "JPG" || asset.type === "PNG") {
+    const image = await jimp.read(asset.url);
+    await image.writeAsync(filePath);
+  } else if (asset.type === "PDF" || asset.type === "PPTX") {
+    download(asset.url, filePath);
+  }
+  // Respond with the URL of the published design
+  res.send({
+    type: "SUCCESS",
+    url: `${req.protocol}s://${req.get("host")}/${asset.name}`,
+  });
+});
 //Goes to /auth if logged in successfully
 app.get("/auth", async (req, res) => {
   // const { query } = req;
@@ -125,27 +144,6 @@ app.post("/configuration/delete", async (req, res) => {
 
   res.send({
     type: "SUCCESS",
-  });
-});
-
-app.post("/publish/resources/upload", async (request, response) => {
-  // Ensure the "public" directory exists
-  await fs.ensureDir(path.join(__dirname, "public"));
-  // Get the first asset from the "assets" array
-  const [asset] = request.body.assets;
-  asset_ = asset;
-  const filePath = path.join(__dirname, "public", asset.name);
-  // Download the asset
-  if (asset.type === "JPG" || asset.type === "PNG") {
-    const image = await jimp.read(asset.url);
-    await image.writeAsync(filePath);
-  } else if (asset.type === "PDF" || asset.type === "PPTX") {
-    download(asset.url, filePath);
-  }
-  // Respond with the URL of the published design
-  response.send({
-    type: "SUCCESS",
-    url: `${request.protocol}://${request.get("host")}/${asset.name}`,
   });
 });
 
