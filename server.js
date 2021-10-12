@@ -110,7 +110,7 @@ app.post("/configuration", async (req, res) => {
   }
 
   //The user is not logged-in
-  response.send({
+  res.send({
     type: "ERROR",
     errorCode: "CONFIGURATION_REQUIRED",
   });
