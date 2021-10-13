@@ -4,7 +4,7 @@ dotenv.config();
 
 const isValidPostRequest = (secret, req) => {
   //Verify the timestamp
-  const sentAtSeconds = request.header("X-Canva-Timestamp");
+  const sentAtSeconds = req.header("X-Canva-Timestamp");
   const receivedAtSeconds = new Date().getTime() / 1000;
 
   if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
@@ -13,8 +13,8 @@ const isValidPostRequest = (secret, req) => {
 
   //Construct the message
   const version = "v1";
-  const timestamp = request.header("X-Canva-Timestamp");
-  const path = getPathForSignatureVerification(request.path);
+  const timestamp = req.header("X-Canva-Timestamp");
+  const path = getPathForSignatureVerification(req.path);
   const body = req.rawBody;
   const message = `${version}:${timestamp}:${path}:${body}`;
 
@@ -22,7 +22,7 @@ const isValidPostRequest = (secret, req) => {
   const signature = calculateSignature(secret, message);
 
   //Reject requests with invalid signatures
-  if (!request.header("X-Canva-Signatures").includes(signature)) {
+  if (!req.header("X-Canva-Signatures").includes(signature)) {
     return false;
   }
 

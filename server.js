@@ -88,10 +88,10 @@ app.get("/login", (req, res) => {
   );
 });
 app.post("/publish/resources/upload", async (req, res) => {
-  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-  //   res.sendStatus(401);
-  //   return;
-  // }
+  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+    res.sendStatus(401);
+    return;
+  }
   const { loggedInUsers } = db.data;
 
   //The user is logged-in
