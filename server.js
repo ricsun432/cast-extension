@@ -1,5 +1,4 @@
 import axios from "axios";
-import crypto from "crypto";
 import dotenv from "dotenv";
 import express from "express";
 import fs from "fs-extra";
@@ -26,92 +25,6 @@ const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 await db.read();
 db.data || (db.data = { loggedInUsers: [] });
-
-const isValidPostRequest = (secret, request) => {
-  //Verify the timestamp
-  const sentAtSeconds = request.header("X-Canva-Timestamp");
-  const receivedAtSeconds = new Date().getTime() / 1000;
-
-  if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
-    return false;
-  }
-
-  //Construct the message
-  const version = "v1";
-  const timestamp = request.header("X-Canva-Timestamp");
-  const path = getPathForSignatureVerification(request.path);
-  const body = request.rawBody;
-  const message = `${version}:${timestamp}:${path}:${body}`;
-
-  //Calculate the signature
-  const signature = calculateSignature(secret, message);
-
-  //Reject requests with invalid signatures
-  if (!request.header("X-Canva-Signatures").includes(signature)) {
-    return false;
-  }
-
-  return true;
-};
-const isValidGetRequest = (secret, request) => {
-  //Verify the timestamp
-  const sentAtSeconds = reqeust.query.time;
-  const receivedAtSeconds = new Date().getTime() / 1000;
-
-  if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
-    return false;
-  }
-
-  //Construct the message
-  const version = "v1";
-  const { time, user, brand, extensions, state } = request.query;
-  const message = `${version}:${time}:${user}:${brand}:${extensions}:${state}`;
-
-  //Calculate a signature
-  const signature = calculateSignature(secret, message);
-
-  //Reject requests with invalid signatures
-  if (!request.query.signatures.includes(signature)) {
-    return false;
-  }
-
-  return true;
-};
-const isValidTimestamp = (
-  sentAtSeconds,
-  receivedAtSeconds,
-  leniencyInSeconds = 300
-) => {
-  return (
-    Math.abs(Number(sentAtSeconds) - Number(receivedAtSeconds)) <
-    Number(leniencyInSeconds)
-  );
-};
-
-const getPathForSignatureVerification = (input) => {
-  const paths = [
-    "/configuration",
-    "/configuration/delete",
-    "/content/resources/find",
-    "/editing/image/process",
-    "/editing/image/process/get",
-    "/publish/resources/find",
-    "/publish/resources/get",
-    "/publish/resources/upload",
-  ];
-  return paths.find((path) => input.endsWith(path));
-};
-
-const calculateSignature = (secret, message) => {
-  //Decode the client secret
-  const key = Buffer.from(secret, "base64");
-
-  //Calculate the signature
-  return crypto.createHmac("sha256", key).update(message).digest("hex");
-};
-app.get("/env", (req, res) => {
-  res.send(`${process.env.NODE_ENV}`);
-});
 
 app.get("/url", (req, res) => {
   if (asset_) {
@@ -142,11 +55,11 @@ async function download(url, path) {
 }
 
 app.get("/login", (req, res) => {
-  if (!isValidGetRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
-  res.sendStatus(200);
+  // if (!isValidGetRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
+  // res.sendStatus(200);
   const { query } = req;
   const { brand } = query; //ID of the user's team.
   const { extensions } = query; //The extenstion points the user is attempting to authenticate with
@@ -171,10 +84,10 @@ app.get("/login", (req, res) => {
   );
 });
 app.post("/publish/resources/upload", async (req, res) => {
-  if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   const { loggedInUsers } = db.data;
 
   //The user is logged-in
@@ -227,10 +140,10 @@ app.get("/auth", async (req, res) => {
 });
 
 app.post("/configuration", async (req, res) => {
-  if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   const { loggedInUsers } = db.data;
   const { user } = req.body;
 
@@ -251,10 +164,10 @@ app.post("/configuration", async (req, res) => {
 });
 
 app.post("/configuration/delete", async (req, res) => {
-  if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   //Remove the current user from the database
   db.data.loggedInUsers = db.data.loggedInUsers.filter((user) => {
     return user !== req.body.user;
