@@ -53,7 +53,30 @@ const isValidPostRequest = (secret, request) => {
 
   return true;
 };
+const isValidGetRequest = (secret, request) => {
+  //Verify the timestamp
+  const sentAtSeconds = reqeust.query.time;
+  const receivedAtSeconds = new Date().getTime() / 1000;
 
+  if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
+    return false;
+  }
+
+  //Construct the message
+  const version = "v1";
+  const { time, user, brand, extensions, state } = request.query;
+  const message = `${version}:${time}:${user}:${brand}:${extensions}:${state}`;
+
+  //Calculate a signature
+  const signature = calculateSignature(secret, message);
+
+  //Reject requests with invalid signatures
+  if (!request.query.signatures.includes(signature)) {
+    return false;
+  }
+
+  return true;
+};
 const isValidTimestamp = (
   sentAtSeconds,
   receivedAtSeconds,
@@ -119,10 +142,11 @@ async function download(url, path) {
 }
 
 app.get("/login", (req, res) => {
-  if (!isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  if (!isValidGetRequest(process.env.CLIENT_SECRET, req)) {
     res.sendStatus(401);
     return;
   }
+  res.sendStatus(200);
   const { query } = req;
   const { brand } = query; //ID of the user's team.
   const { extensions } = query; //The extenstion points the user is attempting to authenticate with
