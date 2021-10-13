@@ -59,10 +59,10 @@ app.get("/env", (req, res) => {
   res.send(`${verify.isValidGetRequest(process.env.CLIENT_SECRET, req)}`);
 });
 app.get("/login", (req, res) => {
-  if (!verify.isValidGetRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!verify.isValidGetRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
 
   const { query } = req;
   const { brand } = query; //ID of the user's team.
@@ -144,10 +144,10 @@ app.get("/auth", async (req, res) => {
 });
 
 app.post("/configuration", async (req, res) => {
-  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   const { loggedInUsers } = db.data;
   const { user } = req.body;
 
