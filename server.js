@@ -6,7 +6,7 @@ import jimp from "jimp";
 import { JSONFile, Low } from "lowdb";
 import path from "path";
 import querystring from "querystring";
-import * as verify from "./verify.js";
+// import * as verify from "./verify.js";
 dotenv.config();
 
 let asset_;
@@ -58,10 +58,10 @@ app.get("/env", (req, res) => {
   res.send(`${verify.isValidGetRequest(process.env.CLIENT_SECRET, req)}`);
 });
 app.get("/login", (req, res) => {
-  if (!verify.isValidGetRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!verify.isValidGetRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
 
   const { query } = req;
   const { brand } = query; //ID of the user's team.
@@ -87,10 +87,10 @@ app.get("/login", (req, res) => {
   );
 });
 app.post("/publish/resources/upload", async (req, res) => {
-  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   const { loggedInUsers } = db.data;
 
   //The user is logged-in
@@ -143,10 +143,10 @@ app.get("/auth", async (req, res) => {
 });
 
 app.post("/configuration", async (req, res) => {
-  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   const { loggedInUsers } = db.data;
   const { user } = req.body;
 
@@ -167,10 +167,10 @@ app.post("/configuration", async (req, res) => {
 });
 
 app.post("/configuration/delete", async (req, res) => {
-  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-    res.sendStatus(401);
-    return;
-  }
+  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+  //   res.sendStatus(401);
+  //   return;
+  // }
   //Remove the current user from the database
   db.data.loggedInUsers = db.data.loggedInUsers.filter((user) => {
     return user !== req.body.user;
