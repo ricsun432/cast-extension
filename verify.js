@@ -84,6 +84,5 @@ const calculateSignature = (secret, message) => {
   //Calculate the signature
   return crypto.createHmac("sha256", key).update(message).digest("hex");
 };
-app.get("/env", (req, res) => {
-  res.send(`${process.env.NODE_ENV}`);
-});
+
+export { isValidGetRequest, isValidPostRequest };
