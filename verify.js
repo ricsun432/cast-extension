@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import * as crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -28,6 +28,7 @@ const isValidPostRequest = (secret, request) => {
 
   return true;
 };
+
 const isValidGetRequest = (secret, request) => {
   //Verify the timestamp
   const sentAtSeconds = reqeust.query.time;
