@@ -2,7 +2,7 @@ import * as crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
-const isValidPostRequest = (secret, request) => {
+const isValidPostRequest = (secret, req) => {
   //Verify the timestamp
   const sentAtSeconds = request.header("X-Canva-Timestamp");
   const receivedAtSeconds = new Date().getTime() / 1000;
@@ -15,7 +15,7 @@ const isValidPostRequest = (secret, request) => {
   const version = "v1";
   const timestamp = request.header("X-Canva-Timestamp");
   const path = getPathForSignatureVerification(request.path);
-  const body = request.rawBody;
+  const body = req.rawBody;
   const message = `${version}:${timestamp}:${path}:${body}`;
 
   //Calculate the signature
@@ -29,9 +29,9 @@ const isValidPostRequest = (secret, request) => {
   return true;
 };
 
-const isValidGetRequest = (secret, request) => {
+const isValidGetRequest = (secret, req) => {
   //Verify the timestamp
-  const sentAtSeconds = request.query.time;
+  const sentAtSeconds = req.query.time;
   const receivedAtSeconds = new Date().getTime() / 1000;
 
   if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
@@ -40,14 +40,14 @@ const isValidGetRequest = (secret, request) => {
 
   //Construct the message
   const version = "v1";
-  const { time, user, brand, extensions, state } = request.query;
+  const { time, user, brand, extensions, state } = req.query;
   const message = `${version}:${time}:${user}:${brand}:${extensions}:${state}`;
 
   //Calculate a signature
   const signature = calculateSignature(secret, message);
 
   //Reject requests with invalid signatures
-  if (!request.query.signatures.includes(signature)) {
+  if (!req.query.signatures.includes(signature)) {
     return false;
   }
 
