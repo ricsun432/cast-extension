@@ -6,7 +6,7 @@ import jimp from "jimp";
 import { JSONFile, Low } from "lowdb";
 import path from "path";
 import querystring from "querystring";
-// import * as verify from "./verify.js";
+import * as verify from "./verify.js";
 dotenv.config();
 
 let asset_;
