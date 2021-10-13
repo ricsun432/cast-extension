@@ -31,7 +31,7 @@ const isValidPostRequest = (secret, request) => {
 
 const isValidGetRequest = (secret, request) => {
   //Verify the timestamp
-  const sentAtSeconds = reqeust.query.time;
+  const sentAtSeconds = request.query.time;
   const receivedAtSeconds = new Date().getTime() / 1000;
 
   if (!isValidTimestamp(sentAtSeconds, receivedAtSeconds)) {
