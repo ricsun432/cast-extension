@@ -168,10 +168,10 @@ app.post("/configuration", async (req, res) => {
 });
 
 app.post("/configuration/delete", async (req, res) => {
-  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-  //   res.sendStatus(401);
-  //   return;
-  // }
+  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+    res.sendStatus(401);
+    return;
+  }
   //Remove the current user from the database
   db.data.loggedInUsers = db.data.loggedInUsers.filter((user) => {
     return user !== req.body.user;
