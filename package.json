@@ -1,10 +1,8 @@
 {
   "name": "cast-extension",
-  "type": "module",
   "version": "0.0.1",
   "description": "A simple Node app built on Express, instantly up and running.",
-  "main":"server.js",
-
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "run": "nodemon server.js"
@@ -23,6 +21,7 @@
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
+  "type": "module",
   "license": "MIT",
   "keywords": [
     "node",

@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+const { createHmac } = require("crypto");
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -83,7 +83,7 @@ const calculateSignature = (secret, message) => {
   const key = Buffer.from(secret, "base64");
 
   //Calculate the signature
-  return crypto.createHmac("sha256", key).update(message).digest("hex");
+  return createHmac("sha256", key).update(message).digest("hex");
 };
 
 export { isValidGetRequest, isValidPostRequest };
