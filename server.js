@@ -19,6 +19,7 @@ app.use(
     },
   })
 );
+
 app.use(express.static("public"));
 app.enable("trust proxy");
 //Set up the database

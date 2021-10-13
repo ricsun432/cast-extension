@@ -1,4 +1,4 @@
-const { createHmac } = require("crypto");
+import { createHmac } from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
