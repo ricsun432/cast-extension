@@ -1,4 +1,5 @@
 import axios from "axios";
+import cors from "cors";
 import dotenv from "dotenv";
 import { EventEmitter } from "events";
 import express from "express";
@@ -8,6 +9,7 @@ import { JSONFile, Low } from "lowdb";
 import path from "path";
 import querystring from "querystring";
 import * as verify from "./verify.js";
+
 dotenv.config();
 
 let asset_;
@@ -15,18 +17,7 @@ let brand_, extensions_, signatures_, state_, time_, user_, code_;
 let openConnections = [];
 const app = express();
 const Stream = new EventEmitter();
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   // res.setHeader("Access-Control-Request-Method", "*");
-//   // res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET");
-//   // res.setHeader("Access-Control-Allow-Headers", "*");
-//   // if (req.method === "OPTIONS") {
-//   //   res.writeHead(200);
-//   //   res.end();
-//   //   return;
-//   // }
-//   next();
-// });
+app.use(cors());
 app.use(
   express.json({
     verify: (req, res, buf) => {
@@ -61,6 +52,7 @@ app.get("/url", (req, res) => {
     if (asset_) {
       // console.log(asset_.url);
       Stream.emit("push", asset_.url);
+      asset_ = {};
       clearInterval(intervalId);
     }
   }, 1000);
