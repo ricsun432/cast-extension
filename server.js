@@ -71,8 +71,7 @@ app.get("/url", (req, res) => {
       console.log(asset_.url);
       res.write(asset_.url);
       return;
-    }else{
-      continue;
+    } else {
     }
   }, 1000);
 });
