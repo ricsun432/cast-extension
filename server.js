@@ -66,11 +66,11 @@ app.get("/url", (req, res) => {
   //   console.log(openConnections.length);
   // });
 
-  setInterval(() => {
+  const intervalId = setInterval(() => {
     if (asset_) {
-      console.log(asset_.url);
+      // console.log(asset_.url);
       res.write(asset_.url);
-      return;
+      clearInterval(intervalId);
     } else {
     }
   }, 1000);
