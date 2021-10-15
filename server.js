@@ -55,7 +55,7 @@ app.get("/url", (req, res) => {
   });
 
   Stream.on("push", (url) => {
-    res.send(url);
+    res.write(url);
   });
   const intervalId = setInterval(() => {
     if (asset_) {
