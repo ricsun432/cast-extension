@@ -46,7 +46,7 @@ db.data || (db.data = { loggedInUsers: [] });
 app.get("/url", (req, res) => {
   // // set timeout as high as possible
 
-  // req.socket.setTimeout(900000);
+  req.socket.setTimeout(900000);
   // send headers for event-stream connection
   res.writeHead(200, {
     "Content-Type": "text/event-stream",
