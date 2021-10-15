@@ -65,9 +65,11 @@ app.get("/url", (req, res) => {
   //   openConnections.splice(i, 1);
   //   console.log(openConnections.length);
   // });
+
   setInterval(() => {
     if (asset_) {
-      res.send(asset_.url);
+      console.log(asset_.url);
+      res.write(asset_.url);
     }
   }, 1000);
 });
