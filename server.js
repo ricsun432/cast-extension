@@ -6,12 +6,15 @@ import jimp from "jimp";
 import { JSONFile, Low } from "lowdb";
 import path from "path";
 import querystring from "querystring";
+import { EventEmitter } from "stream";
 import * as verify from "./verify.js";
 dotenv.config();
 
 let asset_;
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
 const app = express();
+const Stream = new EventEmitter();
+
 app.use(
   express.json({
     verify: (req, res, buf) => {
@@ -27,10 +30,21 @@ const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 await db.read();
 db.data || (db.data = { loggedInUsers: [] });
-
+app.get("/getpdf", (req, res) => {
+  // res.writeHead(200, {
+  //   "Content-Type": "text/event-stream",
+  //   "Cache-Control": "no-cache",
+  //   Connection: "keep-alive",
+  // });
+  // Stream.on('push',(event,data)=>{
+  //   res.write('event"' + String(event) + '\n' + 'data: ' + JSON.stringify(data)+'\n\n')
+  // })
+  // if (asset_) {
+  // }
+});
 app.get("/url", (req, res) => {
   if (asset_) {
-    res.send(asset_);
+    res.send(asset_.url);
   } else {
     console.log(req.cookies);
     res.send("NO ASSET FOUND");
