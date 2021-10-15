@@ -70,6 +70,9 @@ app.get("/url", (req, res) => {
     if (asset_) {
       console.log(asset_.url);
       res.write(asset_.url);
+      return;
+    }else{
+      continue;
     }
   }, 1000);
 });
