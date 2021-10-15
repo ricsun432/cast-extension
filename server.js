@@ -1,12 +1,12 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import { EventEmitter } from "events";
 import express from "express";
 import fs from "fs-extra";
 import jimp from "jimp";
 import { JSONFile, Low } from "lowdb";
 import path from "path";
 import querystring from "querystring";
-import { EventEmitter } from "stream";
 import * as verify from "./verify.js";
 dotenv.config();
 
