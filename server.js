@@ -62,7 +62,6 @@ app.get("/url", (req, res) => {
       // console.log(asset_.url);
       Stream.emit("push", asset_.url);
       clearInterval(intervalId);
-      return;
     }
   }, 1000);
 });
