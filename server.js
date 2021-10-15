@@ -65,13 +65,15 @@ app.get("/url", (req, res) => {
   //   openConnections.splice(i, 1);
   //   console.log(openConnections.length);
   // });
-
+  Stream.on("push", (url) => {
+    res.write(url);
+  });
   const intervalId = setInterval(() => {
     if (asset_) {
       // console.log(asset_.url);
-      res.write(asset_.url);
+      Stream.emit("push", asset_.url);
       clearInterval(intervalId);
-    } else {
+      return;
     }
   }, 1000);
 });
