@@ -15,15 +15,15 @@ let brand_, extensions_, signatures_, state_, time_, user_, code_;
 let openConnections = [];
 const app = express();
 const Stream = new EventEmitter();
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Acces-Contorl-Allow-Methods", "Content-Type", "Authorization");
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+//   res.setHeader("Acces-Contorl-Allow-Methods", "Content-Type", "Authorization");
+//   next();
+// });
 app.use(
   express.json({
     verify: (req, res, buf) => {
@@ -39,18 +39,12 @@ const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 await db.read();
 db.data || (db.data = { loggedInUsers: [] });
-app.get("/getpdf", (req, res) => {
-  // Stream.on('push',(event,data)=>{
-  //   res.write('event"' + String(event) + '\n' + 'data: ' + JSON.stringify(data)+'\n\n')
-  // })
-  // if (asset_) {
-  // }
-});
+
 app.get("/url", (req, res) => {
-  // set timeout as high as possible
+  // // set timeout as high as possible
 
-  req.socket.setTimeout(900000);
-
+  // req.socket.setTimeout(900000);
+  res.header("Access-Control-Allow-Origin", "*");
   // send headers for event-stream connection
   res.writeHead(200, {
     "Content-Type": "text/event-stream",
@@ -58,23 +52,8 @@ app.get("/url", (req, res) => {
     Connection: "keep-alive",
   });
 
-  //push res object to global variable
-  // openConnections.push(res);
-
-  // //Close connection when browser window is closed/request is closed
-  // req.on("close", () => {
-  //   let toRemove;
-  //   for (let i = 0; i < openConnections.length; i++) {
-  //     if (openConnections[i] == res) {
-  //       toRemove = i;
-  //       break;
-  //     }
-  //   }
-  //   openConnections.splice(i, 1);
-  //   console.log(openConnections.length);
-  // });
   Stream.on("push", (url) => {
-    res.write(url);
+    res.send(url);
   });
   const intervalId = setInterval(() => {
     if (asset_) {
