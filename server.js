@@ -16,7 +16,7 @@ let openConnections = [];
 const app = express();
 const Stream = new EventEmitter();
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
   next();
 });
 app.use(
