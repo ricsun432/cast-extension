@@ -15,15 +15,10 @@ let brand_, extensions_, signatures_, state_, time_, user_, code_;
 let openConnections = [];
 const app = express();
 const Stream = new EventEmitter();
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-//   res.setHeader("Acces-Contorl-Allow-Methods", "Content-Type", "Authorization");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  next();
+});
 app.use(
   express.json({
     verify: (req, res, buf) => {
@@ -44,7 +39,6 @@ app.get("/url", (req, res) => {
   // // set timeout as high as possible
 
   // req.socket.setTimeout(900000);
-  res.header("Access-Control-Allow-Origin", "*");
   // send headers for event-stream connection
   res.writeHead(200, {
     "Content-Type": "text/event-stream",
