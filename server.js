@@ -59,6 +59,7 @@ app.get("/url", (req, res) => {
 
   if (asset_) {
     res.json(asset_);
+    asset_ = {};
   } else {
     res.json({});
   }
