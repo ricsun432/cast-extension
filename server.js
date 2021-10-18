@@ -58,7 +58,7 @@ app.get("/url", (req, res) => {
   // }, 1000);
 
   if (asset_) {
-    res.send(asset_.url);
+    res.json(asset_);
   } else {
     res.send("NO ASSET FOUND");
   }
