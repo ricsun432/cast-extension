@@ -37,25 +37,31 @@ db.data || (db.data = { loggedInUsers: [] });
 app.get("/url", (req, res) => {
   // // set timeout as high as possible
 
-  req.socket.setTimeout(900000);
-  // send headers for event-stream connection
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-  });
+  // req.socket.setTimeout(900000);
+  // // send headers for event-stream connection
+  // res.writeHead(200, {
+  //   "Content-Type": "text/event-stream",
+  //   "Cache-Control": "no-cache",
+  //   Connection: "keep-alive",
+  // });
 
-  Stream.on("push", (url) => {
-    res.write(url);
-  });
-  const intervalId = setInterval(() => {
-    if (asset_) {
-      // console.log(asset_.url);
-      Stream.emit("push", asset_.url);
-      asset_ = {};
-      clearInterval(intervalId);
-    }
-  }, 1000);
+  // Stream.on("push", (url) => {
+  //   res.write(url);
+  // });
+  // const intervalId = setInterval(() => {
+  //   if (asset_) {
+  //     // console.log(asset_.url);
+  //     Stream.emit("push", asset_.url);
+  //     asset_ = {};
+  //     clearInterval(intervalId);
+  //   }
+  // }, 1000);
+
+  if (asset_) {
+    res.send(asset_.url);
+  } else {
+    res.send("NO ASSET FOUND");
+  }
 });
 
 async function download(url, path) {
