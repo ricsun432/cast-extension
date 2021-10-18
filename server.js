@@ -62,6 +62,7 @@ app.get("/url", (req, res) => {
       ...asset_,
       uri: `${req.protocol}://${req.get("host")}/${asset_.name}`,
     });
+    downloaded = false;
     asset_ = {};
   } else {
     res.json({});
