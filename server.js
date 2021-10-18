@@ -58,7 +58,10 @@ app.get("/url", (req, res) => {
   // }, 1000);
 
   if (asset_) {
-    res.json(asset_);
+    res.json({
+      ...asset_,
+      uri: `${req.protocol}://${req.get("host")}/${asset_.url}`,
+    });
     asset_ = {};
   } else {
     res.json({});
