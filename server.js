@@ -57,7 +57,7 @@ app.get("/url", (req, res) => {
   //   }
   // }, 1000);
 
-  if (asset_) {
+  if (Object.keys(asset_).length > 0) {
     res.json({
       ...asset_,
       uri: `${req.protocol}://${req.get("host")}/${asset_.name}`,
