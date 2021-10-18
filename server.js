@@ -12,7 +12,7 @@ import * as verify from "./verify.js";
 
 dotenv.config();
 
-let asset_;
+let asset_ = {};
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
 let openConnections = [];
 const app = express();
