@@ -60,7 +60,7 @@ app.get("/url", (req, res) => {
   if (asset_) {
     res.json({
       ...asset_,
-      uri: `${req.protocol}://${req.get("host")}/${asset_.url}`,
+      uri: `${req.protocol}://${req.get("host")}/${asset_.name}`,
     });
     asset_ = {};
   } else {
