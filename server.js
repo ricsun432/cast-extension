@@ -11,7 +11,7 @@ import querystring from "querystring";
 import * as verify from "./verify.js";
 
 dotenv.config();
-
+let downloaded = false;
 let asset_ = {};
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
 let openConnections = [];
@@ -57,7 +57,7 @@ app.get("/url", (req, res) => {
   //   }
   // }, 1000);
 
-  if (Object.keys(asset_).length > 0) {
+  if (downloaded && Object.keys(asset_).length > 0) {
     res.json({
       ...asset_,
       uri: `${req.protocol}://${req.get("host")}/${asset_.name}`,
@@ -80,6 +80,7 @@ async function download(url, path) {
   return new Promise((resolve, reject) => {
     response.data.on("end", () => {
       resolve();
+      downloaded = true;
     });
     response.data.on("error", (err) => {
       reject(err);
