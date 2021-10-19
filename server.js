@@ -153,10 +153,10 @@ app.get("/auth", async (req, res) => {
 });
 
 app.post("/configuration", async (req, res) => {
-  // if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
-  //   res.sendStatus(401);
-  //   return;
-  // }
+  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+    res.sendStatus(401);
+    return;
+  }
   const { loggedInUsers } = db.data;
   const { user } = req.body;
 
