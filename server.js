@@ -66,7 +66,7 @@ async function download(url, path) {
   });
 }
 app.get("/env", (req, res) => {
-  res.send(`${verify.isValidGetRequest(process.env.CLIENT_SECRET, req)}`);
+  res.send(`${process.env.CLIENT_SECRET}`);
 });
 app.get("/login", (req, res) => {
   if (!verify.isValidGetRequest(process.env.CLIENT_SECRET, req)) {
