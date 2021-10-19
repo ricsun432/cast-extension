@@ -14,7 +14,6 @@ dotenv.config();
 let downloaded = false;
 let asset_ = {};
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
-let openConnections = [];
 const app = express();
 const Stream = new EventEmitter();
 app.use(cors());
@@ -35,28 +34,6 @@ await db.read();
 db.data || (db.data = { loggedInUsers: [] });
 
 app.get("/url", (req, res) => {
-  // // set timeout as high as possible
-
-  // req.socket.setTimeout(900000);
-  // // send headers for event-stream connection
-  // res.writeHead(200, {
-  //   "Content-Type": "text/event-stream",
-  //   "Cache-Control": "no-cache",
-  //   Connection: "keep-alive",
-  // });
-
-  // Stream.on("push", (url) => {
-  //   res.write(url);
-  // });
-  // const intervalId = setInterval(() => {
-  //   if (asset_) {
-  //     // console.log(asset_.url);
-  //     Stream.emit("push", asset_.url);
-  //     asset_ = {};
-  //     clearInterval(intervalId);
-  //   }
-  // }, 1000);
-
   if (downloaded && Object.keys(asset_).length > 0) {
     res.json({
       ...asset_,
@@ -117,7 +94,6 @@ app.get("/login", (req, res) => {
   //redirect to BuriPass
   res.redirect(
     `https://pass.buri.io/oauth/authorize?client_id=${client_id}&redirect_uri=${url}&response_type=code&scope=openid`
-    //&brand=${brand}&extensions=${extensions}&signatures=${signatures}&state=${state}&time=${time}&user=${user} -> comment muna
   );
 });
 app.post("/publish/resources/upload", async (req, res) => {
