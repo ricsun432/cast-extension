@@ -99,7 +99,7 @@ app.get("/url", (req, res) => {
       assets: assets_,
     });
     downloaded = false;
-    asset_ = {};
+    //asset_ = {};
   } else {
     res.json({});
   }
