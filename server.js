@@ -99,7 +99,7 @@ app.get("/url", (req, res) => {
       assets: assets_,
     });
     downloaded = false;
-    //asset_ = {};
+    asset_ = {};
   } else {
     res.json({});
   }
@@ -179,6 +179,8 @@ app.post("/publish/resources/upload", async (req, res) => {
     } else if (asset.type === "PDF" || asset.type === "PPTX") {
       download(asset.url, filePath);
     }
+
+    downloaded = true;
     // Respond with the URL of the published design
     res.send({
       type: "SUCCESS",
