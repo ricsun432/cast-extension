@@ -26,7 +26,7 @@ app.use(
   })
 );
 
-app.use(express.static("public"));
+app.use("/public", express.static("public"));
 app.enable("trust proxy");
 //Set up the database
 const adapter = new JSONFile("db.json");
