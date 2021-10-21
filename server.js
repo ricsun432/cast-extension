@@ -89,7 +89,7 @@ app.post("/publish/resources/get", async (req, res) => {
 });
 
 app.get("/url", (req, res) => {
-  if (downloaded && Object.keys(asset_).length > 0) {
+  if (downloaded) {
     res.json({
       ...asset_,
       uri: `${req.protocol}://${req.get("host")}/${path.join(
