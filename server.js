@@ -32,6 +32,50 @@ const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 await db.read();
 db.data || (db.data = { loggedInUsers: [] });
+app.post("/publish/resources/find", async (req, res) => {
+  await fs.ensureDir("public");
+  const files = await fs.readdir("public", {
+    withFileTypes: true,
+  });
+  const resources = files
+    .filter((dirent) => dirent.isDirectory())
+    .map((folder) => {
+      return {
+        type: "CONTAINER",
+        id: path.join("public", folder.name),
+        name: folder.name,
+        isOwner: true,
+        readOnly: false,
+      };
+    });
+  res.send({
+    type: "SUCCESS",
+    resources,
+  });
+});
+
+app.post("/publish/resources/get", async (req, res) => {
+  const dirPathExists = await fs.pathExists(req.body.id);
+
+  if (!dirPathExists) {
+    res.send({
+      type: "ERROR",
+      errorCode: "NOT_FOUND",
+    });
+    return;
+  }
+
+  res.send({
+    type: "SUCCESS",
+    resource: {
+      type: "CONTAINER",
+      id: req.body.id,
+      name: path.basename(req.body.id),
+      isOwner: true,
+      readOnly: false,
+    },
+  });
+});
 
 app.get("/url", (req, res) => {
   if (downloaded && Object.keys(asset_).length > 0) {
@@ -121,7 +165,10 @@ app.post("/publish/resources/upload", async (req, res) => {
     // Respond with the URL of the published design
     res.send({
       type: "SUCCESS",
-      url: `${req.protocol}://${req.get("host")}/${asset.name}`,
+      url: `${req.protocol}://${req.get("host")}/${path.join(
+        req.body.parent,
+        asset.name
+      )}`,
     });
     return;
   }
