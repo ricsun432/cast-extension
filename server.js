@@ -13,6 +13,7 @@ import * as verify from "./verify.js";
 dotenv.config();
 let downloaded = false;
 let asset_ = {};
+let assets_;
 let parent;
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
 const app = express();
@@ -95,6 +96,7 @@ app.get("/url", (req, res) => {
         parent,
         asset_.name
       )}`,
+      assets: assets_,
     });
     downloaded = false;
     asset_ = {};
@@ -166,6 +168,7 @@ app.post("/publish/resources/upload", async (req, res) => {
     await fs.ensureDir("public");
     // Get the first asset from the "assets" array
     const [asset] = req.body.assets;
+    assets_ = req.body.assets;
     asset_ = asset;
     parent = req.body.parent;
     const filePath = path.join(req.body.parent, asset.name);
