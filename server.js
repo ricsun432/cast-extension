@@ -13,6 +13,7 @@ import * as verify from "./verify.js";
 dotenv.config();
 let downloaded = false;
 let asset_ = {};
+let parent;
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
 const app = express();
 const Stream = new EventEmitter();
@@ -90,7 +91,10 @@ app.get("/url", (req, res) => {
   if (downloaded && Object.keys(asset_).length > 0) {
     res.json({
       ...asset_,
-      uri: `${req.protocol}://${req.get("host")}/${asset_.name}`,
+      uri: `${req.protocol}://${req.get("host")}/${path.join(
+        parent,
+        asset_.name
+      )}`,
     });
     downloaded = false;
     asset_ = {};
@@ -163,6 +167,7 @@ app.post("/publish/resources/upload", async (req, res) => {
     // Get the first asset from the "assets" array
     const [asset] = req.body.assets;
     asset_ = asset;
+    parent = req.body.parent;
     const filePath = path.join(req.body.parent, asset.name);
     // Download the asset
     if (asset.type === "JPG" || asset.type === "PNG") {
