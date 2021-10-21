@@ -154,7 +154,7 @@ app.post("/publish/resources/upload", async (req, res) => {
     // Get the first asset from the "assets" array
     const [asset] = req.body.assets;
     asset_ = asset;
-    const filePath = path.join("public", asset.name);
+    const filePath = path.join(req.body.parent, asset.name);
     // Download the asset
     if (asset.type === "JPG" || asset.type === "PNG") {
       const image = await jimp.read(asset.url);
@@ -165,10 +165,7 @@ app.post("/publish/resources/upload", async (req, res) => {
     // Respond with the URL of the published design
     res.send({
       type: "SUCCESS",
-      url: `${req.protocol}://${req.get("host")}/${path.join(
-        req.body.parent,
-        asset.name
-      )}`,
+      url: `${req.protocol}://${req.get("host")}/${filePath}`,
     });
     return;
   }
