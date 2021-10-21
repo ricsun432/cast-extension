@@ -32,7 +32,12 @@ const adapter = new JSONFile("db.json");
 const db = new Low(adapter);
 await db.read();
 db.data || (db.data = { loggedInUsers: [] });
+
 app.post("/publish/resources/find", async (req, res) => {
+  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+    res.sendStatus(401);
+    return;
+  }
   await fs.ensureDir("public");
   const files = await fs.readdir("public", {
     withFileTypes: true,
@@ -55,6 +60,10 @@ app.post("/publish/resources/find", async (req, res) => {
 });
 
 app.post("/publish/resources/get", async (req, res) => {
+  if (!verify.isValidPostRequest(process.env.CLIENT_SECRET, req)) {
+    res.sendStatus(401);
+    return;
+  }
   const dirPathExists = await fs.pathExists(req.body.id);
 
   if (!dirPathExists) {
