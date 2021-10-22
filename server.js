@@ -185,6 +185,7 @@ app.post("/publish/resources/upload", async (req, res) => {
           req.body.parent,
           assets_[i].name
         )}`,
+        type: assets_[i].type,
       });
     }
 
