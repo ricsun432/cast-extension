@@ -14,6 +14,7 @@ dotenv.config();
 let downloaded = false;
 let asset_ = {};
 let assets_;
+let filePaths = [];
 let parent;
 let brand_, extensions_, signatures_, state_, time_, user_, code_;
 const app = express();
@@ -91,12 +92,8 @@ app.post("/publish/resources/get", async (req, res) => {
 app.get("/url", (req, res) => {
   if (downloaded) {
     res.json({
-      ...asset_,
-      uri: `${req.protocol}://${req.get("host")}/${path.join(
-        parent,
-        asset_.name
-      )}`,
       assets: assets_,
+      links: filePaths,
     });
     downloaded = false;
     asset_ = {};
@@ -167,24 +164,38 @@ app.post("/publish/resources/upload", async (req, res) => {
     // Ensure the "public" directory exists
     await fs.ensureDir("public");
     // Get the first asset from the "assets" array
+
     const [asset] = req.body.assets;
+    filePaths = [];
     assets_ = req.body.assets;
     asset_ = asset;
     parent = req.body.parent;
-    const filePath = path.join(req.body.parent, asset.name);
-    // Download the asset
-    if (asset.type === "JPG" || asset.type === "PNG") {
-      const image = await jimp.read(asset.url);
-      await image.writeAsync(filePath);
-    } else if (asset.type === "PDF" || asset.type === "PPTX") {
-      download(asset.url, filePath);
+    for (let i = 0; i < assets_.length; i++) {
+      const filePath = path.join(req.body.parent, assets_[i].name);
+      // Download the asset
+      if (assets_[i].type === "JPG" || assets_[i].type === "PNG") {
+        const image = await jimp.read(assets_[i].url);
+        await image.writeAsync(filePath);
+      } else if (assets_[i].type === "PDF" || assets_[i].type === "PPTX") {
+        download(assets_[i].url, filePath);
+      }
+
+      filePaths.push({
+        url: `${req.protocol}://${req.get("host")}/${path.join(
+          req.body.parent,
+          assets_[i].name
+        )}`,
+      });
     }
 
     downloaded = true;
     // Respond with the URL of the published design
     res.send({
       type: "SUCCESS",
-      url: `${req.protocol}://${req.get("host")}/${filePath}`,
+      url: `${req.protocol}://${req.get("host")}/${path.join(
+        req.body.parent,
+        asset.name
+      )}`,
     });
     return;
   }
