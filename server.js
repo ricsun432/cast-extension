@@ -138,7 +138,7 @@ app.get("/login", (req, res) => {
   const { time } = query; // The UNIX timestamp (in seconds) of when the user started the authentication flow.
   const { user } = query; // The ID of the user.
   const protocol = req.secure ? "https" : "http";
-  const url = `${protocol}://${req.get("host")}/auth`;
+  const url = `https://${req.get("host")}/auth`;
   const client_id = `75cd73448b797acfc0b420312b79f81d4d29ec80e89804746da6882e7ae1ef01`;
   //assign to server variable
   brand_ = brand;
