@@ -190,7 +190,6 @@ app.post("/publish/resources/upload", async (req, res) => {
       });
     }
 
-    downloaded = true;
     // Respond with the URL of the published design
     res.send({
       type: "SUCCESS",
@@ -199,6 +198,7 @@ app.post("/publish/resources/upload", async (req, res) => {
         asset.name
       )}`,
     });
+    downloaded = true;
     return;
   }
   //The user is not logged-in
