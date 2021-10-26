@@ -182,7 +182,7 @@ app.post("/publish/resources/upload", async (req, res) => {
       }
 
       filePaths.push({
-        url: `${req.protocol}://${req.get("host")}/${path.join(
+        url: `https://${req.get("host")}/${path.join(
           req.body.parent,
           assets_[i].name
         )}`,
@@ -194,7 +194,7 @@ app.post("/publish/resources/upload", async (req, res) => {
     // Respond with the URL of the published design
     res.send({
       type: "SUCCESS",
-      url: `${req.protocol}://${req.get("host")}/${path.join(
+      url: `https://${req.get("host")}/${path.join(
         req.body.parent,
         asset.name
       )}`,
