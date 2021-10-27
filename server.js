@@ -198,7 +198,9 @@ app.post("/publish/resources/upload", async (req, res) => {
         asset.name
       )}`,
     });
-    downloaded = true;
+    setTimeout(() => {
+      downloaded = true;
+    }, 2000);
     return;
   }
   //The user is not logged-in
