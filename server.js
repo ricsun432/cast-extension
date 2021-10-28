@@ -92,7 +92,6 @@ app.post("/publish/resources/get", async (req, res) => {
 app.get("/url", (req, res) => {
   if (downloaded) {
     res.json({
-      assets: assets_,
       links: filePaths,
     });
     downloaded = false;
@@ -187,6 +186,7 @@ app.post("/publish/resources/upload", async (req, res) => {
           assets_[i].name
         )}`,
         type: assets_[i].type,
+        name: assets_[i].name.split(" ").pop(),
       });
     }
 
